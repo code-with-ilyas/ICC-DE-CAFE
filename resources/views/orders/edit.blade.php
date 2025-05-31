@@ -7,7 +7,7 @@
         @method('PUT')
 
         <div class="card-header d-flex justify-content-between align-items-center py-2 px-3">
-        <a href="{{ route('orders.index') }}" class="btn btn-success btn-sm">Show Orders</a>
+        <a href="{{ route('orders.index') }}" class="btn btn-success btn-sm">Show Orders List</a>
             <button type="submit" class="btn btn-sm btn-success">
                 <i class="fas fa-save me-1"></i>Update Order
             </button>

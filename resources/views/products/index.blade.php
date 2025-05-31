@@ -1,94 +1,170 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="container mt-4">
-    <div class="card shadow-sm p-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0 text-white">Products List</h3>
-            <a href="{{ route('products.create') }}" class="btn btn-success">Add Product</a>
+<div class="container">
+    <div class="card shadow-glow">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-white">Products List</h4>
+            <a href="{{ route('products.create') }}" class="btn btn-success">+ Add Product</a>
         </div>
+        <hr>
 
-        {{-- Success Message --}}
         @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success py-2 text-center" role="alert">
+            {{ session('success') }}
+        </div>
         @endif
 
-        {{-- Debugging: Check if $products is defined --}}
-        @if(!isset($products))
-            <div class="alert alert-danger">
-                The $products variable is not defined.
-            </div>
-        @else
-            <div class="table-responsive">
-                <table class="table table-striped table-hover text-center align-middle">
-                    <thead> <!-- White background -->
-                        <tr>
-                            <th>ID</th>
-                            <th>Category</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Available</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($products as $product)
-                        <tr>
-                            <td>{{ $product->product_id }}</td>
-                            <td>{{ $product->category?->name ?? 'N/A' }}</td>
-                            <td>{{ $product->name }}</td>
-                            <td class="text-truncate" style="max-width: 200px;">{{ $product->description }}</td>
-                            <td>PKR{{ number_format($product->price, 2) }}</td>
-                            <td>
-                                <span class="badge {{ $product->is_available ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $product->is_available ? 'Yes' : 'No' }}
-                                </span>
-                            </td>
-                            <td>
-                                {{-- Edit Button --}}
-                                <a href="{{ route('products.edit', $product->product_id) }}" class="btn btn-primary btn-sm">
-                                    Edit
-                                </a>
-
-                                {{-- Delete Button --}}
-                                <form action="{{ route('products.destroy', $product->product_id) }}" method="POST" class="d-inline">
+        <div class="card-body">
+            <table class="table table-bordered table-striped shadow-glow text-center align-middle">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($products as $index => $product)
+                    <tr>
+                        <td>{{ $loop->iteration + ($products->currentPage() - 1) * $products->perPage() }}</td>
+                        <td>{{ $product->product_id }}</td>
+                        <td>{{ $product->category->name ?? 'N/A' }}</td>
+                        <td>{{ $product->name }}</td>
+                        <td>{{ $product->description }}</td>
+                        <td>{{ number_format($product->price, 2) }}</td>
+                        <td>
+                            @if($product->is_available)
+                            <span class="badge bg-success">Yes</span>
+                            @else
+                            <span class="badge bg-danger">No</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{{ route('products.show', $product->product_id) }}" class="btn btn-sm btn-success">Show</a>
+                                <a href="{{ route('products.edit', $product->product_id) }}" class="btn btn-sm btn-success">Edit</a>
+                                <form action="{{ route('products.destroy', $product->product_id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this product?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?')">
-                                        Delete
-                                    </button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center">No products found.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            @if(method_exists($products, 'links'))
+            <div class="mt-3">
+                {{ $products->appends(request()->query())->links() }}
             </div>
-        @endif
+            @endif
+        </div>
     </div>
 </div>
+
 <style>
-.dark-theme .card {
-    background-color: #2a2a2a !important;
-    color: #e0e0e0 !important;
-    border: 2px solid #00bcd4 !important; /* Teal Blue Border */
-    box-shadow: 0 0 12px rgba(0, 188, 212, 0.5) !important; /* Light glow */
-}
+    .pagination .page-link {
+        color: #fff !important;
+        background-color: rgb(27, 45, 56) !important;
+        border: 1px solid #00bcd4 !important;
+        margin: 0 2px;
+        padding: 6px 12px;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
+    }
 
+    .pagination .active .page-link {
+        background-color: #00bcd4 !important;
+        color: #000 !important;
+        font-weight: bold;
+        border-color: #00bcd4;
+        box-shadow: 0 0 15px rgba(0, 188, 212, 0.9);
+    }
 
+    .pagination .page-link:hover {
+        background-color: rgba(0, 188, 212, 0.7) !important;
+        color: #000 !important;
+    }
 
-.table, .table th, .table td {
-    border: 1px solid #00bcd4 !important; /* Light blue outlines */
-    color: #ffffff !important;            /* White text in th and td */
-}
+    .container {
+        padding: 20px;
+    }
 
-.table {
-    border-collapse: collapse !important;
-}
+    .card.shadow-glow {
+        border: 2px solid #00bcd4 !important;
+        border-radius: 10px !important;
+        box-shadow: 0 0 15px rgba(0, 188, 212, 0.8) !important;
+        margin-bottom: 20px;
+    }
 
+    .card-body {
+        padding: 15px !important;
+    }
 
+    .table.shadow-glow {
+        border: 2px solid #00bcd4 !important;
+        color: white !important;
+        box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+    }
 
+    .table thead th {
+        background-color: rgba(0, 188, 212, 0.3) !important;
+        border-bottom: 2px solid #00bcd4 !important;
+        color: white !important;
+        font-weight: 600;
+    }
 
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #00bcd4 !important;
+        color: white !important;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(0, 188, 212, 0.15) !important;
+    }
+
+    hr {
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 188, 212, 0.8) 20%, #00bcd4 50%,
+                rgba(0, 188, 212, 0.8) 80%,
+                rgba(0, 0, 0, 0) 100%);
+        margin: 15px 0;
+    }
+
+   
+
+    .btn-danger {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 10px rgba(220, 53, 69, 0.6);
+    }
+
+   
+    .btn-danger:hover {
+        background-color: #c82333 !important;
+        border-color: #bd2130 !important;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(0, 188, 212, 0.5) !important;
+        border-color: #00bcd4 !important;
+    }
 </style>
 @endsection

@@ -56,17 +56,6 @@
         background-color: rgba(0, 230, 255, 0.05) !important;
     }
 
-    .table tfoot th {
-        background-color: rgba(0, 188, 212, 0.3);
-        color: rgb(255, 255, 255) !important;
-        border-top: 2px solid #00e6ff !important;
-        box-shadow: 0 0 8px rgba(0, 230, 255, 0.3);
-    }
-
-    .table-total {
-        background-color: rgba(0, 230, 255, 0.1) !important;
-    }
-
     .card {
         background-color: rgba(102, 81, 81, 0.3);
         backdrop-filter: blur(5px);
@@ -77,17 +66,6 @@
     .card-title {
         color: #00e6ff !important;
         font-weight: 600;
-    }
-
-    .form-control.border-info {
-        border: 1px solid #00e6ff !important;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .form-control.border-info:focus {
-        border-color: #00e6ff;
-        box-shadow: 0 0 5px rgba(0, 230, 255, 0.3), 0 0 10px rgba(0, 230, 255, 0.2);
-        background-color: #fff3cd !important;
     }
 
     .btn-info {
@@ -106,18 +84,6 @@
         transform: translateY(-1px);
     }
 
-    .btn-outline-light {
-        border-color: #00e6ff;
-        color: #00e6ff;
-        transition: all 0.2s ease;
-    }
-
-    .btn-outline-light:hover {
-        background-color: #00e6ff;
-        border-color: #00e6ff;
-        color: #000;
-    }
-
     .text-white {
         color: #ffffff !important;
     }
@@ -130,77 +96,20 @@
         color: #00ff88 !important;
     }
 
-    body {
-        background: linear-gradient(135deg, rgb(65, 65, 70) 0%, rgb(65, 65, 70) 100%);
-        min-height: 100vh;
-    }
-
-    .text-right {
-        text-align: right !important;
-    }
-
-    .alert {
-        border-radius: 0.5rem;
-        border: 1px solid rgba(0, 230, 255, 0.3);
-    }
-
-    .alert-info {
-        background-color: rgba(0, 230, 255, 0.1);
-        border-color: #00e6ff;
-        color: #fff;
-    }
-
-    .alert-danger {
-        background-color: rgba(255, 0, 0, 0.1);
-        border-color: #ff4444;
-        color: #ff6666;
-    }
-
-    .badge {
-        font-size: 0.75rem;
-    }
-
-    .form-label {
+    .custom-date-display {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background-color: rgba(0, 230, 255, 0.05);
+        border: 1px dashed #00e6ff;
+        border-radius: 10px;
+        color: #ffffff;
         font-weight: 500;
-        margin-bottom: 0.5rem;
+        padding: 15px;
     }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .summary-card {
-            min-height: 100px;
-        }
-        
-        .summary-amount {
-            font-size: 1rem;
-        }
-        
-        .table-responsive {
-            font-size: 0.9rem;
-        }
-        
-        .container {
-            padding: 1rem;
-        }
-    }
-
-    /* Loading animation for cards */
-    .summary-card {
-        animation: fadeInUp 0.6s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-     .pagination .page-link {
+    
+    .pagination .page-link {
         color: #fff !important;
         background-color: rgb(27, 45, 56) !important;
         border: 1px solid #00bcd4 !important;
@@ -222,7 +131,8 @@
         background-color: rgba(0, 188, 212, 0.7) !important;
         color: #000 !important;
     }
-     .form-control.bg-warning {
+
+    .form-control.bg-warning {
         background-color: rgba(255, 193, 7, 0.2) !important;
         color: white !important;
     }
@@ -231,10 +141,11 @@
         background-color: rgba(255, 193, 7, 0.3) !important;
     }
 </style>
-<div class="container py-4">
-    <h2 class="mb-4 text-white">📊 Sales Reports</h2>
 
-    <!-- Summary Cards + Custom Date Display -->
+<div class="container py-4">
+    <h2 class="mb-4 text-white">📊 Purchase Stock Reports</h2>
+
+    <!-- Summary Cards -->
     @foreach (array_chunk([
         'today' => 'Daily Purchase',
         'yesterday' => 'Yesterday Purchase',
@@ -262,21 +173,31 @@
         </div>
     @endforeach
 
-
+    <!-- Custom Date Range Display -->
+    @if(request('start_date') && request('end_date'))
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="custom-date-display">
+                    Showing results from <span class="text-info mx-1">{{ request('start_date') }}</span> 
+                    to <span class="text-info mx-1">{{ request('end_date') }}</span>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Filters -->
     <div class="card neon-border mb-4">
         <div class="card-body">
             <h5 class="card-title text-info">Filter by Date Range</h5>
-            <form method="GET" action="{{ route('reports.index') }}">
+            <form method="GET" action="{{ route('purchase-reports.index') }}">
                 <div class="row align-items-end">
                     <div class="col-md-4 mb-3">
                         <label for="start_date" class="text-white">Start Date</label>
-                        <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control border-info bg-warning text-dark" />
+                        <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control border-info bg-warning" />
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="end_date" class="text-white">End Date</label>
-                        <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control border-info bg-warning text-dark" />
+                        <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control border-info bg-warning" />
                     </div>
                     <div class="col-md-4 mb-3">
                         <button class="btn btn-info w-100">Apply Filter</button>
@@ -286,61 +207,46 @@
         </div>
     </div>
 
-    <!-- Orders Table -->
-    @if($orders->count() > 0)
-    <div class="card neon-border mb-4">
-        <div class="card-body">
-            <h5 class="card-title text-info">Order Table</h5>
+    <!-- Purchase Table -->
+    <div class="card neon-border">
+        <div class="card-header text-white">
+            <h5 class="mb-0 text-white">Purchase Stock Report Table</h5>
+        </div>
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-bordered neon-border">
+                <table class="table table-bordered text-white mb-0">
                     <thead>
                         <tr>
-                            <th class="text-white">ID</th>
-                            <th class="text-white">Name</th>
-                            <th class="text-white">Table Number</th>
-                            <th class="text-white">Products</th>
-                            <th class="text-white">Quantity</th>
-                            <th class="text-white">Discount</th>
-                            <th class="text-white">Total Amount</th>
+                            <th>S.NO</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Supplier Name</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($orders as $order)
+                        @forelse ($purchaseStocks as $index => $stock)
                             <tr>
-                                <td class="text-white">{{ $order->id }}</td>
-                                <td class="text-white">{{ $order->customer_name ?? 'N/A' }}</td>
-                                <td class="text-white">{{ $order->table_number ?? 'N/A' }}</td>
-                                <td class="text-white">
-                                    <ul class="list-unstyled mb-0">
-                                        @foreach ($order->items as $item)
-                                            <li class="text-white">{{ $item->product->name }}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
-                                <td class="text-white">
-                                    <ul class="list-unstyled mb-0">
-                                        @foreach ($order->items as $item)
-                                            <li class="text-white">{{ $item->quantity }}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
-                                <td class="text-white">{{ number_format($order->discount, 2) }} PKR</td>
-                                <td class="text-white">{{ number_format($order->total_amount, 2) }} PKR</td>
+                                <td>{{ $purchaseStocks->firstItem() + $index }}</td>
+                                <td>{{ $stock->product_name }}</td>
+                                <td>{{ $stock->quantity }}</td>
+                                <td>Rs {{ number_format($stock->unit_price, 2) }}</td>
+                                <td>{{ $stock->supplier_name }}</td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-danger">No purchase records found.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
-           
-             <!-- Pagination Links -->
+            <!-- Pagination Links -->
             <div class="mt-3 px-3">
-                {{ $orders->withQueryString()->links() }}
+                {{ $purchaseStocks->withQueryString()->links() }}
             </div>
         </div>
     </div>
-    @else
-        <div class="alert alert-info text-center">No orders found for the selected filter.</div>
-    @endif
 </div>
 @endsection

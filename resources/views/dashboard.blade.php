@@ -2,14 +2,6 @@
 
 @section('content')
 
-
-
-
-
-
-            
-
-
             
 
 

@@ -5,13 +5,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\IngredientController;
-use App\Http\Controllers\PurchaseStockController;
-use App\Http\Controllers\ProductIngredientController;
-use App\Http\Controllers\StockMovementController;
-
-
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PurchaseStockController;
+use App\Http\Controllers\PurchaseReportController;
+use App\Http\Controllers\ExpenseController;
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,8 +27,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::resource('categories', CategoryController::class);
-Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 Route::post('/orders/filter', [OrderController::class, 'filter'])->name('orders.filter');
@@ -38,32 +37,24 @@ Route::get('/reports', [\App\Http\Controllers\ReportController::class, 'index'])
 Route::get('/orders/{id}/print', [OrderController::class, 'print'])->name('orders.print');
 
 
-
-
-
-
-// Ingredients Routes
-Route::resource('ingredients', IngredientController::class);
-Route::get('ingredients-stock', [IngredientController::class, 'stock'])->name('ingredients.stock');
-
-// Purchase Stock Routes
-Route::resource('purchase-stocks', PurchaseStockController::class);
-
-
-
-Route::resource('products.ingredients', ProductIngredientController::class)->except(['show']);
-
-
-// Stock Movements
-Route::get('stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
-Route::get('stock-movements/{ingredient}', [StockMovementController::class, 'ingredientMovements'])
-    ->name('stock-movements.ingredient');
+Route::get('/orders/{order}/kitchen-print', [OrderController::class, 'kitchenPrint'])->name('orders.kitchen.print');
 
 
 
 
 
-// Dashboard
-Route::get('dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::resource('products', ProductController::class);
+
+
+Route::resource('purchase_stocks', PurchaseStockController::class);
+
+
+Route::get('/purchase-reports', [PurchaseReportController::class, 'index'])->name('purchase.reports.index');
+
+
+
+
+Route::resource('expenses', ExpenseController::class);
+
+
+require __DIR__ . '/auth.php';

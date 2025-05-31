@@ -10,28 +10,19 @@ class PurchaseStock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ingredient_id', 
-        'quantity', 
-        'cost_price', 
-        'purchase_date',
-        'expiry_date',
-        'supplier',
-        'remaining_quantity',
-        'batch_number'
+        'supplier_name',
+        'supplier_number',
+        'date',
+        'product_name',
+        'quantity',
+        'unit_price',
+        'total_price',
     ];
 
+    // Optional: Casts
     protected $casts = [
-        'purchase_date' => 'date',
-        'expiry_date' => 'date',
+        'date' => 'date',
+        'unit_price' => 'decimal:2',
+        'total_price' => 'decimal:2',
     ];
-
-    public function ingredient()
-    {
-        return $this->belongsTo(Ingredient::class);
-    }
-
-    public function stockMovements()
-    {
-        return $this->hasMany(StockMovement::class);
-    }
 }

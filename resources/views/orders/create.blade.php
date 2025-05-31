@@ -6,7 +6,7 @@
         @csrf
 
         <div class="card-header d-flex justify-content-between align-items-center py-2 px-3" style="border-bottom: 2px solid #00bcd4;">
-            <a href="{{ route('orders.index') }}" class="btn btn-success text-white btn-sm">Show Orders</a>
+            <a href="{{ route('orders.index') }}" class="btn btn-success text-white btn-sm">Show Orders List</a>
             <button type="submit" class="btn btn-sm btn-success">
                 <i class="fas fa-save me-1"></i>Create Order
             </button>

@@ -3,57 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\PurchaseStock;
-use App\Models\Ingredient;
-use App\Models\StockMovement;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PurchaseStockController extends Controller
 {
     public function index()
     {
-        $purchaseStocks = PurchaseStock::with('ingredient')->latest()->get();
+        $purchaseStocks = PurchaseStock::orderBy('date', 'desc')->paginate(2);
         return view('purchase_stocks.index', compact('purchaseStocks'));
     }
 
     public function create()
     {
-        $ingredients = Ingredient::all();
-        return view('purchase_stocks.create', compact('ingredients'));
+        return view('purchase_stocks.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'ingredient_id' => 'required|exists:ingredients,id',
-            'quantity' => 'required|numeric|min:0.01',
-            'cost_price' => 'required|numeric|min:0.01',
-            'purchase_date' => 'required|date',
-            'expiry_date' => 'nullable|date|after:purchase_date',
-            'supplier' => 'nullable|string|max:255',
-            'batch_number' => 'nullable|string|max:255',
+        $request->validate([
+            'supplier_name'    => 'required|string|max:255',
+            'supplier_number'  => 'nullable|string|max:255',
+            'date'             => 'required|date',
+            'product_name.*'   => 'required|string|max:255',
+            'quantity.*'       => 'required|string|max:255',
+            'unit_price.*'     => 'required|numeric|min:0',
         ]);
 
-        // Set remaining quantity to the initial quantity
-        $validated['remaining_quantity'] = $validated['quantity'];
-        
-        DB::transaction(function () use ($validated) {
-            // Create purchase stock
-            $purchaseStock = PurchaseStock::create($validated);
-            
-            // Create stock movement
-            StockMovement::create([
-                'ingredient_id' => $validated['ingredient_id'],
-                'purchase_stock_id' => $purchaseStock->id,
-                'type' => 'purchase',
-                'quantity' => $validated['quantity'],
-                'remaining_balance' => $validated['quantity'],
-                'notes' => 'Initial purchase'
-            ]);
-        });
+        foreach ($request->product_name as $index => $productName) {
+            $unitPrice = $request->unit_price[$index];
+            $quantity  = $request->quantity[$index];
 
-        return redirect()->route('purchase-stocks.index')
-            ->with('success', 'Purchase stock recorded successfully.');
+            $quantityValue = floatval(preg_replace('/[^0-9.]/', '', $quantity)); // Extract numeric value from quantity
+            $totalPrice = $unitPrice * $quantityValue;
+
+            PurchaseStock::create([
+                'supplier_name'   => $request->supplier_name,
+                'supplier_number' => $request->supplier_number,
+                'date'            => $request->date,
+                'product_name'    => $productName,
+                'quantity'        => $quantity,
+                'unit_price'      => $unitPrice,
+                'total_price'     => $totalPrice,
+            ]);
+        }
+
+        return redirect()->route('purchase_stocks.index')->with('success', 'Purchase stock added successfully.');
     }
 
     public function show(PurchaseStock $purchaseStock)
@@ -63,64 +57,40 @@ class PurchaseStockController extends Controller
 
     public function edit(PurchaseStock $purchaseStock)
     {
-        $ingredients = Ingredient::all();
-        return view('purchase_stocks.edit', compact('purchaseStock', 'ingredients'));
+        return view('purchase_stocks.edit', compact('purchaseStock'));
     }
 
     public function update(Request $request, PurchaseStock $purchaseStock)
     {
-        $validated = $request->validate([
-            'ingredient_id' => 'required|exists:ingredients,id',
-            'quantity' => 'required|numeric|min:0.01',
-            'cost_price' => 'required|numeric|min:0.01',
-            'purchase_date' => 'required|date',
-            'expiry_date' => 'nullable|date|after:purchase_date',
-            'supplier' => 'nullable|string|max:255',
-            'batch_number' => 'nullable|string|max:255',
+        $request->validate([
+            'supplier_name'    => 'required|string|max:255',
+            'supplier_number'  => 'nullable|string|max:255',
+            'date'             => 'required|date',
+            'product_name'     => 'required|string|max:255',
+            'quantity'         => 'required|string|max:255',
+            'unit_price'       => 'required|numeric|min:0',
         ]);
 
-        // Handle remaining quantity
-        $oldQuantity = $purchaseStock->quantity;
-        $newQuantity = $validated['quantity'];
-        
-        // Adjust remaining quantity proportionally
-        if ($oldQuantity != 0) {
-            $ratio = $newQuantity / $oldQuantity;
-            $validated['remaining_quantity'] = $purchaseStock->remaining_quantity * $ratio;
-        } else {
-            $validated['remaining_quantity'] = $newQuantity;
-        }
-        
-        DB::transaction(function () use ($purchaseStock, $validated, $oldQuantity, $newQuantity) {
-            $purchaseStock->update($validated);
-            
-            // Create adjustment stock movement
-            if ($oldQuantity != $newQuantity) {
-                StockMovement::create([
-                    'ingredient_id' => $validated['ingredient_id'],
-                    'purchase_stock_id' => $purchaseStock->id,
-                    'type' => 'adjustment',
-                    'quantity' => $newQuantity - $oldQuantity, // Positive for increase, negative for decrease
-                    'remaining_balance' => $validated['remaining_quantity'],
-                    'notes' => 'Quantity adjustment'
-                ]);
-            }
-        });
+        $unitPrice = $request->unit_price;
+        $quantityValue = floatval(preg_replace('/[^0-9.]/', '', $request->quantity));
+        $totalPrice = $unitPrice * $quantityValue;
 
-        return redirect()->route('purchase-stocks.index')
-            ->with('success', 'Purchase stock updated successfully.');
+        $purchaseStock->update([
+            'supplier_name'   => $request->supplier_name,
+            'supplier_number' => $request->supplier_number,
+            'date'            => $request->date,
+            'product_name'    => $request->product_name,
+            'quantity'        => $request->quantity,
+            'unit_price'      => $unitPrice,
+            'total_price'     => $totalPrice,
+        ]);
+
+        return redirect()->route('purchase_stocks.index')->with('success', 'Purchase stock updated successfully.');
     }
 
     public function destroy(PurchaseStock $purchaseStock)
     {
-        if ($purchaseStock->remaining_quantity < $purchaseStock->quantity) {
-            return redirect()->route('purchase-stocks.index')
-                ->with('error', 'Cannot delete purchase stock that has been used.');
-        }
-        
         $purchaseStock->delete();
-
-        return redirect()->route('purchase-stocks.index')
-            ->with('success', 'Purchase stock deleted successfully.');
+        return redirect()->route('purchase_stocks.index')->with('success', 'Purchase stock deleted successfully.');
     }
 }

@@ -6,7 +6,7 @@
     <div class="card shadow-glow">
         <div class="card-body d-flex justify-content-between align-items-center">
             <h4 class="mb-0 text-white">Orders List</h4>
-            <a href="{{ route('orders.create') }}" class="btn btn-success">Create New Order</a>
+            <a href="{{ route('orders.create') }}" class="btn btn-success">+ ADD Order</a>
         </div>
         <hr>
         <div class="card-body">
@@ -32,46 +32,51 @@
                         <td>
                             <ul class="list-unstyled mb-0">
                                 @foreach ($order->items as $item)
-                                    <li>{{ $item->product->name ?? 'Unknown' }}</li>
+                                <li>{{ $item->product->name ?? 'Unknown' }}</li>
                                 @endforeach
                             </ul>
                         </td>
                         <td>
                             <ul class="list-unstyled mb-0">
                                 @foreach ($order->items as $item)
-                                    <li>{{ $item->quantity }}</li>
+                                <li>{{ $item->quantity }}</li>
                                 @endforeach
                             </ul>
                         </td>
                         <td>{{ number_format($order->discount, 2) }} PKR</td>
                         <td>{{ number_format($order->total_amount, 2) }} PKR</td>
                         <td>
-                            <div class="d-flex gap-2">
+                            <div class="d-flex flex-wrap gap-1 align-items-center">
                                 <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-success">Show</a>
                                 <a href="{{ route('orders.edit', $order) }}" class="btn btn-sm btn-success">Edit</a>
-                                <a href="{{ route('orders.print', $order) }}" class="btn btn-sm btn-success">Print</a>
+                                <a href="{{ route('orders.kitchen.print', $order->id) }}" class="btn btn-sm btn-primary">KP</a>
+                                <a href="{{ route('orders.print', $order) }}" class="btn btn-sm btn-warning">Print</a>
+
                                 <form action="{{ route('orders.destroy', $order) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
                             </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="8" class="text-center">No Orders Found</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
 
-            <div class="mt-2">
-                {{ $orders->appends(request()->query())->links() }}
-            </div>
+        </div>
+        </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="8" class="text-center">No Orders Found</td>
+        </tr>
+        @endforelse
+        </tbody>
+        </table>
+
+        <div class="mt-2">
+            {{ $orders->appends(request()->query())->links() }}
         </div>
     </div>
 </div>
+</div>
+
 
 <style>
     .pagination .page-link {
@@ -146,12 +151,7 @@
         margin: 15px 0;
     }
 
-    .btn {
-        background-color: #00bcd4 !important;
-        border-color: #00bcd4 !important;
-        color: white !important;
-        box-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
-    }
+
 
     .btn-danger {
         background-color: #dc3545 !important;
@@ -159,10 +159,7 @@
         box-shadow: 0 0 10px rgba(220, 53, 69, 0.6);
     }
 
-    .btn:hover {
-        background-color: #00aabf !important;
-        border-color: #00aabf !important;
-    }
+
 
     .btn-danger:hover {
         background-color: #c82333 !important;
@@ -175,4 +172,5 @@
         border-color: #00bcd4 !important;
     }
 </style>
+
 @endsection

@@ -61,7 +61,17 @@
         }
 
         .dark-theme .nav-link.text-primary {
-            color: #4db8ff !important;
+            color: rgb(222, 236, 26) !important;
+        }
+
+        .glowing-blue {
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.7), 0 0 30px rgba(0, 188, 212, 0.5);
+            border: 2px solid rgba(0, 188, 212, 0.7);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .glowing-blue:hover {
+            box-shadow: 0 0 25px rgba(0, 188, 212, 1), 0 0 40px rgba(0, 188, 212, 0.9);
         }
     </style>
 </head>
@@ -71,42 +81,40 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar navbar-light">
-                <a href="{{ route('dashboard') }}" class="navbar-brand mx-4 mb-4">
-                    <img class="rounded-circle" src="{{ asset('admin_assets/img/GreenBurger.png') }}" alt="Logo" style="width: 120px; height: 120px;">
+                <a href="{{ ('') }}" class="navbar-brand mx-4 mb-4">
+                    <img class="rounded-circle"
+                        src="{{ asset('admin_assets/img/GreenBurger.png') }}"
+                        alt="Logo"
+                        style="width: 120px; height: 120px; border: 4px solid rgba(0, 188, 212, 0.7); box-shadow: 0 0 12px rgba(0, 188, 212, 0.7); padding: 2px;">
+
+
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="{{ asset('admin_assets/img/ilyas.jpg') }}" alt="Profile" style="width: 40px; height: 40px;">
-                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                    </div>
-                    <div class="ms-3">
-                        <!-- <h6 class="mb-0">MUHAMMAD ILYAS</h6> -->
-                        <span class="text-white">MUHAMMAD ILYAS</span>
                     </div>
                 </div>
                 <ul class="nav flex-column">
 
                     <a href="{{ route('categories.index') }}" class="nav-link d-flex align-items-center">
-                        <i class="bi bi-list-task me-2"></i> Categories</a>
-
+                        <i class="bi bi-list-task me-2"></i>Categories</a>
 
                     <a href="{{ route('products.index') }}" class="nav-link d-flex align-items-center">
-                        <i class="bi bi-box-seam me-2"></i> Products</a>
-
+                        <i class="bi bi-box-seam me-2"></i>Products</a>
 
                     <a href="{{ route('orders.index') }}" class="nav-link d-flex align-items-center">
-                        <i class="bi bi-receipt me-2"></i> Orders </a>
-
-
+                        <i class="bi bi-receipt me-2"></i>Orders</a>
 
                     <a href="{{ route('reports.index') }}" class="nav-link d-flex align-items-center">
-                        <i class="bi bi-receipt me-2"></i> Reports </a>
+                        <i class="bi bi-receipt me-2"></i>Reports</a>
 
-                    <a href="{{ route('ingredients.index') }}" class="nav-link d-flex align-items-center">
-                        <i class="bi bi-receipt me-2"></i>Ingredients</a>
-
-                    <a href="{{ route('purchase-stocks.index') }}" class="nav-link d-flex align-items-center">
+                    <a href="{{ route('purchase_stocks.index') }}" class="nav-link d-flex align-items-center">
                         <i class="bi bi-receipt me-2"></i>Purchase Stocks</a>
+
+                    <a href="{{ route('purchase.reports.index') }}" class="nav-link d-flex align-items-center">
+                        <i class="bi bi-receipt me-2"></i>Purchase Stock Report</a>
+
+                    <a href="{{ route('expenses.index') }}" class="nav-link d-flex align-items-center">
+                        <i class="bi bi-receipt me-2"></i>Expenses</a>
 
 
 

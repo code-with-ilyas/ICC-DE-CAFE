@@ -1,76 +1,48 @@
 @extends('layouts.auth')
 
-@section('title', 'Edit Product')
-
 @section('content')
-<div class="card mx-auto my-5 py-4" style="max-width: 700px;">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <a href="{{ route('products.index') }}" class="btn btn-success me-2">Show Products List</a>
-        <div>
-            
-            <button type="submit" form="product-form" class="btn btn-success">Update Product</button>
-        </div>
-    </div>
-    <div class="card-body">
-        <form id="product-form" action="{{ route('products.update', $product->product_id) }}" method="POST">
-            @csrf
-            @method('PUT')
+<div class="d-flex justify-content-center py-2">
+    <form action="{{ route('purchase_stocks.update', $purchaseStock->id) }}" method="POST" style="width: 90%; max-height: 85vh; overflow-y: auto;" class="card shadow-sm">
+        @csrf
+        @method('PUT')
 
+        <div class="card-header d-flex justify-content-between align-items-center py-2 px-3">
+            <a href="{{ route('purchase_stocks.index') }}" class="btn btn-success btn-sm">Show Purchases List</a>
+            <button type="submit" class="btn btn-sm btn-success">
+                <i class="fas fa-save me-1"></i>Update Purchases
+            </button>
+        </div>
+
+        <div class="card-body py-2 px-3">
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="category_id" class="form-label">Category</label>
-                    <select class="form-select" id="category_id" name="category_id" required>
-                        <option value="">Select Category</option>
-                        @foreach($categories as $category)
-                        <option value="{{ $category->category_id }}" {{ (old('category_id', $product->category_id) == $category->category_id) ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('category_id')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                    <label class="form-label small">Product Name</label>
+                    <input type="text" name="product_name" class="form-control form-control-sm" value="{{ $purchaseStock->product_name }}" required>
                 </div>
-
                 <div class="col-md-6">
-                    <label for="name" class="form-label">Product Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required maxlength="100" value="{{ old('name', $product->name) }}">
-                    @error('name')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                    <label class="form-label small">Quantity</label>
+                    <input type="number" name="quantity" class="form-control form-control-sm" value="{{ $purchaseStock->quantity }}" required>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $product->description) }}</textarea>
-                    @error('description')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                    <label class="form-label small">Unit Price</label>
+                    <input type="number" step="0.01" name="unit_price" class="form-control form-control-sm" value="{{ $purchaseStock->unit_price }}" required>
                 </div>
-
                 <div class="col-md-6">
-                    <label for="price" class="form-label">Price</label>
-                    <input type="number" step="0.01" class="form-control" id="price" name="price" required value="{{ old('price', $product->price) }}">
-                    @error('price')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                    <label class="form-label small">Supplier Name</label>
+                    <input type="text" name="supplier_name" class="form-control form-control-sm" value="{{ $purchaseStock->supplier_name }}" required>
                 </div>
             </div>
 
             <div class="mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="is_available" name="is_available" value="1" {{ old('is_available', $product->is_available) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="is_available">
-                        Is Available
-                    </label>
-                </div>
+                <label class="form-label small">Date</label>
+                <input type="date" name="date" class="form-control form-control-sm" value="{{ $purchaseStock->date }}" required>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
-
 <style>
        /* Add this to your style section */
 .card-header {

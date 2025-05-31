@@ -8,7 +8,7 @@
             <!-- Order Details Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="text-white">Order Details</h3>
-                <a href="{{ route('orders.index') }}" class="btn btn-success btn-lg">Back to Orders</a>
+                <a href="{{ route('orders.index') }}" class="btn btn-success btn-lg">Back To Orders List</a>
             </div>
             <hr class="my-3">
 

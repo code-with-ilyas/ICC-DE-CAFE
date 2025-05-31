@@ -2,93 +2,176 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Purchase Stock Records</span>
-                    <a href="{{ route('purchase-stocks.create') }}" class="btn btn-primary btn-sm">Add Purchase Stock</a>
-                </div>
+    {{-- Purchase Stock Table --}}
+    <div class="card shadow-glow">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-white">Purchases Stock List</h4>
+            <a href="{{ route('purchase_stocks.create') }}" class="btn btn-success">+ Add Stock</a>
+        </div>
+        <hr>
 
+        <div class="row">
+            {{-- Table Column --}}
+            <div class="col-md-12">
                 <div class="card-body">
-                    @if (session('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('success') }}
-                    </div>
-                    @endif
-
-                    @if (session('error'))
-                    <div class="alert alert-danger" role="alert">
-                        {{ session('error') }}
-                    </div>
-                    @endif
-
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped shadow-glow">
                         <thead>
                             <tr>
-                                <th>Ingredient</th>
-                                <th>Initial Quantity</th>
-                                <th>Remaining</th>
-                                <th>Cost Price</th>
-                                <th>Purchase Date</th>
-                                <th>Expiry Date</th>
-                                <th>Supplier</th>
-                                <th width="150">Actions</th>
+                                <th>S.No</th>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total Price</th>
+                                <th>Supplier Name</th>
+                                <th>Supplier Number</th>
+                                <th>Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($purchaseStocks as $stock)
+                            @php $grandTotal = 0; @endphp
+                            @forelse($purchaseStocks as $stock)
+                            @php $grandTotal += $stock->total_price; @endphp
                             <tr>
-                                <td>{{ $stock->ingredient->name }}</td>
-                                <td>{{ $stock->quantity }} {{ $stock->ingredient->unit }}</td>
+                                <td>{{ $purchaseStocks->firstItem() + $loop->index }}</td>
+                                <td>{{ $stock->product_name }}</td>
+                                <td>{{ $stock->quantity }}</td>
+                                <td>{{ number_format($stock->unit_price, 2) }}</td>
+                                <td>{{ number_format($stock->total_price, 2) }}</td>
+                                <td>{{ $stock->supplier_name }}</td>
+                                <td>{{ $stock->supplier_number ?? '-' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($stock->date)->format('d-F-Y') }}</td>
                                 <td>
-                                    {{ $stock->remaining_quantity }} {{ $stock->ingredient->unit }}
-                                    @if ($stock->remaining_quantity <= 0)
-                                        <span class="badge bg-danger">Out of Stock</span>
-                                        @elseif ($stock->remaining_quantity < ($stock->quantity * 0.1))
-                                            <span class="badge bg-warning text-dark">Low</span>
-                                            @endif
-                                </td>
-                                <td>${{ number_format($stock->cost_price, 2) }}</td>
-                                <td>{{ $stock->purchase_date->format('M d, Y') }}</td>
-                                <td>
-                                    @if($stock->expiry_date)
-                                    {{ $stock->expiry_date->format('M d, Y') }}
-                                    @if($stock->expiry_date < now())
-                                        <span class="badge bg-danger">Expired</span>
-                                        @elseif($stock->expiry_date < now()->addDays(7))
-                                            <span class="badge bg-warning text-dark">Expiring Soon</span>
-                                            @endif
-                                            @else
-                                            N/A
-                                            @endif
-                                </td>
-                                <td>{{ $stock->supplier ?? 'N/A' }}</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="{{ route('purchase-stocks.show', $stock) }}" class="btn btn-sm btn-primary me-2">Show</a>
-
-                                        <a href="{{ route('purchase-stocks.edit', $stock) }}" class="btn btn-sm btn-warning me-2">Edit</a>
-
-                                        <form action="{{ route('purchase-stocks.destroy', $stock) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('purchase_stocks.show', $stock->id) }}" class="btn btn-sm btn-success">Show</a>
+                                        <a href="{{ route('purchase_stocks.edit', $stock->id) }}" class="btn btn-sm btn-success">Edit</a>
+                                        <form action="{{ route('purchase_stocks.destroy', $stock->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            <button class="btn btn-sm btn-danger">Delete</button>
                                         </form>
                                     </div>
-
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center">No purchase stock records found.</td>
+                                <td colspan="9" class="text-center">No Purchase Stocks Found</td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
+                    {{-- Grand Total Below Table --}}
+                    <hr>
+                    <div class="text-end">
+                        <h5 class="text-white">Grand Total: <span class="text-success">{{ number_format($grandTotal, 2) }}</span></h5>
+                    </div>
+                    <hr>
+
+
+                    {{-- Pagination --}}
+                    @if(method_exists($purchaseStocks, 'links'))
+                    <div class="mt-2">
+                        {{ $purchaseStocks->appends(request()->query())->links() }}
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+{{-- Your existing style remains unchanged --}}
+<style>
+    .pagination .page-link {
+        color: #fff !important;
+        background-color: rgb(27, 45, 56) !important;
+        border: 1px solid #00bcd4 !important;
+        margin: 0 2px;
+        padding: 6px 12px;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
+    }
+
+    .pagination .active .page-link {
+        background-color: #00bcd4 !important;
+        color: #000 !important;
+        font-weight: bold;
+        border-color: #00bcd4;
+        box-shadow: 0 0 15px rgba(0, 188, 212, 0.9);
+    }
+
+    .pagination .page-link:hover {
+        background-color: rgba(0, 188, 212, 0.7) !important;
+        color: #000 !important;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .card.shadow-glow {
+        border: 2px solid #00bcd4 !important;
+        border-radius: 10px !important;
+        box-shadow: 0 0 15px rgba(0, 188, 212, 0.8) !important;
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        padding: 15px !important;
+    }
+
+    .table.shadow-glow {
+        border: 2px solid #00bcd4 !important;
+        color: white !important;
+        box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+    }
+
+    .table thead th {
+        background-color: rgba(0, 188, 212, 0.3) !important;
+        border-bottom: 2px solid #00bcd4 !important;
+        color: white !important;
+        font-weight: 600;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #00bcd4 !important;
+        color: white !important;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(0, 188, 212, 0.15) !important;
+    }
+
+    hr {
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 188, 212, 0.8) 20%, #00bcd4 50%,
+                rgba(0, 188, 212, 0.8) 80%,
+                rgba(0, 0, 0, 0) 100%);
+        margin: 15px 0;
+    }
+
+
+    .btn-danger {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 10px rgba(220, 53, 69, 0.6);
+    }
+
+   
+
+    .btn-danger:hover {
+        background-color: #c82333 !important;
+        border-color: #bd2130 !important;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(0, 188, 212, 0.5) !important;
+        border-color: #00bcd4 !important;
+    }
+</style>
 @endsection
