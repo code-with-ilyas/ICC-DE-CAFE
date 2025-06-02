@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with FoodHut landing page.">
     <meta name="author" content="Devcrud">
-    <title>ICC DE CAFE</title>
+    <title>𝓲𝓬𝓬 𝓓𝓮 𝓬𝓪𝓯𝓮</title>
+
+
+    <link rel="icon" type="image/png" href="{{ asset('assets/imgs/GreenBurger.png') }}">
+
    
     <!-- font icons -->
     <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
@@ -58,10 +62,6 @@
                      <a class="nav-link" href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Login</a>
                   </li>
 
-                  <li class="nav-item">
-                     <a class="nav-link" href="{{ route('register') }}" class="{{ request()->routeIs('register') ? 'active' : '' }}">Register</a>
-                  </li>
-
                  
                 
             </ul>
@@ -93,7 +93,7 @@
             <div class="col-sm-4">
                 <h3>𝓒𝓐𝓛𝓛 𝓤𝓢</h3>
                 <P class="text-muted">(0943) 480-406</P>
-                <P class="text-muted">03450206666</P>
+                <P class="text-muted">03250206666</P>
             </div>
             <div class="col-sm-4">
                 <!-- <h3>FIND US</h3>

@@ -27,7 +27,7 @@ class ExpenseController extends Controller
             $query->whereYear('date', $year);
         }
 
-        $expenses = $query->latest()->paginate(10);
+        $expenses = $query->latest()->paginate(50);
         $total = (clone $query)->sum('amount');
 
         return view('expenses.index', compact('expenses', 'total'));

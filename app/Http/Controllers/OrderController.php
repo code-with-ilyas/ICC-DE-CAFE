@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Exceptions\InsufficientStockException;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -22,7 +21,7 @@ public function index(Request $request)
         return view('orders.print', compact('order'));
     }
 
-    $orders = $query->with('items.product')->latest()->paginate(2);
+    $orders = $query->with('items.product')->latest()->paginate(50);
 
     return view('orders.index', compact('orders'));
 }

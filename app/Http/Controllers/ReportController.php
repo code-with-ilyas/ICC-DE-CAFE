@@ -66,7 +66,7 @@ class ReportController extends Controller
         }
 
         // Use paginate instead of get
-        $orders = $query->with('items.product')->oldest()->paginate(2);
+        $orders = $query->with('items.product')->oldest()->paginate(50);
 
         return view('reports.index', [
             'orders' => $orders,

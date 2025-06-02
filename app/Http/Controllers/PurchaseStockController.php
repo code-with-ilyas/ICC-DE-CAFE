@@ -9,7 +9,7 @@ class PurchaseStockController extends Controller
 {
     public function index()
     {
-        $purchaseStocks = PurchaseStock::orderBy('date', 'desc')->paginate(2);
+        $purchaseStocks = PurchaseStock::orderBy('date', 'desc')->paginate(50);
         return view('purchase_stocks.index', compact('purchaseStocks'));
     }
 

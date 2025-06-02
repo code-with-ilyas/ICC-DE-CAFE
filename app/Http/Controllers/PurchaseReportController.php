@@ -20,7 +20,7 @@ class PurchaseReportController extends Controller
         }
 
         // Paginate results
-        $purchaseStocks = $query->latest()->paginate(2);
+        $purchaseStocks = $query->latest()->paginate(50);
 
         // Dynamically calculate total purchase value from quantity * unit_price
         $calculateTotal = fn($stocks) => $stocks->sum(function ($stock) {

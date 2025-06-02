@@ -2,26 +2,25 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-       
-        DB::table('users')->insert([
-      [
-        
-        'email' => 'net3ilyas@gmail.com',
-        'password' => Hash::make('faizanjan'),
-      ],
-      ] );
+        User::create([
+            'name' => 'Zahid',
+            'email' => 'net3zahid@gmail.com',
+            'password' => bcrypt('azad123@'),
+            'role' => 'admin',
+        ]);
+
+        User::create([
+            'name' => 'Client',
+            'email' => 'net3client@gmail.com',
+            'password' => bcrypt('client0506'),
+            'role' => 'client',
+        ]);
     }
 }

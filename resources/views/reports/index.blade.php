@@ -236,15 +236,15 @@
 
     <!-- Summary Cards + Custom Date Display -->
     @foreach (array_chunk([
-        'today' => 'Daily Purchase',
-        'yesterday' => 'Yesterday Purchase',
-        'last_7_days' => 'Last 7 Days Purchase',
-        'this_month' => 'Monthly Purchase',
-        'last_month' => 'Last Month Purchase',
-        'this_year' => 'This Year Purchase',
-        'last_year' => 'Last Year Purchase',
-        'current_financial_year' => 'Current Financial Year Purchase',
-        'last_financial_year' => 'Last Financial Year Purchase'
+        'today' => 'Daily Sale',
+        'yesterday' => 'Yesterday Sale',
+        'last_7_days' => 'Last 7 Days Sale',
+        'this_month' => 'Monthly Sale',
+        'last_month' => 'Last Month Sale',
+        'this_year' => 'This Year Sale',
+        'last_year' => 'Last Year Sale',
+        'current_financial_year' => 'Current Financial Year Sale',
+        'last_financial_year' => 'Last Financial Year Sale'
     ], 3, true) as $chunk)
         <div class="row mb-4">
             @foreach ($chunk as $key => $label)

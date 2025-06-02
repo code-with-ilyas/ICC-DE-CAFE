@@ -58,25 +58,31 @@
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
                             </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center">No Orders Found</td>
+                    </tr>
+                    @endforelse
+                    
 
-        </div>
-        </td>
-        </tr>
-        @empty
-        <tr>
-            <td colspan="8" class="text-center">No Orders Found</td>
-        </tr>
-        @endforelse
-        </tbody>
-        </table>
 
-        <div class="mt-2">
-            {{ $orders->appends(request()->query())->links() }}
+                </tbody>
+            </table>
+            <hr>
+            {{-- Grand Total Always Shown --}}
+                    <div class="d-flex justify-content-end text-white fw-bold fs-5 mb-3">
+                        Grand Total: Rs. {{ number_format($orders->sum('total_amount'), 2) }}
+                    </div>
+
+
+            <div class="mt-2">
+                {{ $orders->appends(request()->query())->links() }}
+            </div>
         </div>
     </div>
 </div>
-</div>
-
 
 <style>
     .pagination .page-link {
@@ -151,15 +157,11 @@
         margin: 15px 0;
     }
 
-
-
     .btn-danger {
         background-color: #dc3545 !important;
         border-color: #dc3545 !important;
         box-shadow: 0 0 10px rgba(220, 53, 69, 0.6);
     }
-
-
 
     .btn-danger:hover {
         background-color: #c82333 !important;
@@ -172,5 +174,4 @@
         border-color: #00bcd4 !important;
     }
 </style>
-
 @endsection
