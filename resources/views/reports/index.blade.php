@@ -283,6 +283,7 @@
 
 <div class="container py-4">
     <h2 class="mb-4 text-white">📊 Sales Reports</h2>
+<<<<<<< Updated upstream
     <!-- Sales Summary Small Cards with Icons & Hover Animation -->
     <div class="row mb-4">
         <!-- Total Sales -->
@@ -291,6 +292,41 @@
                 <div class="card-body py-4">
                     <div class="icon-circle bg-success mb-3">
                         💰
+=======
+
+    <!-- Total Overall Sales -->
+    <div class="mb-4">
+        <div class="card neon-border bg-gradient-info shadow-lg">
+            <div class="card-body text-center py-4">
+                <h4 class="text-white">💰 TOTAL AMOUNT</h4>
+                <h2 class="text-success">Rs {{ number_format($totalSalesOverall ?? 0, 2) }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    @foreach (array_chunk([
+        'today' => 'Daily Sale',
+        'yesterday' => 'Yesterday Sale',
+        'last_7_days' => 'Last 7 Days Sale',
+        'this_month' => 'Monthly Sale',
+        'last_month' => 'Last Month Sale',
+        'this_year' => 'This Year Sale',
+        'last_year' => 'Last Year Sale',
+        'current_financial_year' => 'Current Financial Year Sale',
+        'last_financial_year' => 'Last Financial Year Sale'
+    ], 3, true) as $chunk)
+        <div class="row mb-4">
+            @foreach ($chunk as $key => $label)
+                <div class="col-md-4 mb-3">
+                    <div class="card neon-border h-100">
+                        <div class="card-body text-center">
+                            <h6 class="card-title text-info">{{ $label }}</h6>
+                            <p class="card-text text-white">
+                                <strong class="summary-amount">Rs {{ number_format($sales[$key] ?? 0, 0) }}</strong>
+                            </p>
+                        </div>
+>>>>>>> Stashed changes
                     </div>
                     <h6 class="text-white">TOTAL SALE</h6>
                     <h4 class="text-success mt-2">Rs {{ number_format($totalSalesOverall ?? 0, 2) }}</h4>
@@ -379,12 +415,20 @@
                     <div class="col-md-4 mb-3">
                         <label class="text-white">Start Date</label>
                         <input type="date" name="start_date" value="{{ old('start_date', $startDate) }}"
+<<<<<<< Updated upstream
                             class="form-control border-info bg-warning text-dark" />
+=======
+                               class="form-control border-info bg-warning text-dark" />
+>>>>>>> Stashed changes
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="text-white">End Date</label>
                         <input type="date" name="end_date" value="{{ old('end_date', $endDate) }}"
+<<<<<<< Updated upstream
                             class="form-control border-info bg-warning text-dark" />
+=======
+                               class="form-control border-info bg-warning text-dark" />
+>>>>>>> Stashed changes
                     </div>
                     <div class="col-md-4 mb-3">
                         <button class="btn btn-info w-100">Apply Filter</button>
@@ -396,6 +440,7 @@
 
     <!-- New: Items Sold Summary -->
     @if(isset($itemsSoldToday) && $itemsSoldToday->count())
+<<<<<<< Updated upstream
     <div class="card neon-border mb-4">
         <div class="card-body">
             <h5 class="card-title text-info">🧮 Items Sold {{ $startDate && $endDate ? 'from '. $startDate .' to '. $endDate : 'Today' }}</h5>
@@ -459,8 +504,71 @@
                 </table>
             </div>
             <div class="mt-3 px-3">{{ $orders->withQueryString()->links() }}</div>
+=======
+        <div class="card neon-border mb-4">
+            <div class="card-body">
+                <h5 class="card-title text-info">🧮 Items Sold {{ $startDate && $endDate ? 'from '. $startDate .' to '. $endDate : 'Today' }}</h5>
+                <ul class="list-group">
+                    @foreach($itemsSoldToday as $name => $qty)
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-info">
+                            {{ $name }}
+                            <span class="badge bg-info text-dark">{{ $qty }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
-    </div>
+    @endif
+
+    <!-- Orders Table -->
+    @if($orders->count())
+        <div class="card neon-border mb-4">
+            <div class="card-body">
+                <h5 class="card-title text-info">Order Table</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered neon-border">
+                        <thead>
+                            <tr>
+                                <th class="text-white">ID</th>
+                                <th class="text-white">Name</th>
+                                <th class="text-white">Table Number</th>
+                                <th class="text-white">Products</th>
+                                <th class="text-white">Quantity</th>
+                                <th class="text-white">Discount</th>
+                                <th class="text-white">Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($orders as $order)
+                                <tr>
+                                    <td class="text-white">{{ $order->id }}</td>
+                                    <td class="text-white">{{ $order->customer_name ?? 'N/A' }}</td>
+                                    <td class="text-white">{{ $order->table_number ?? 'N/A' }}</td>
+                                    <td class="text-white">
+                                        <ul class="list-unstyled mb-0">
+                                            @foreach ($order->items as $item)
+                                                <li>{{ $item->product->name }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td class="text-white">
+                                        <ul class="list-unstyled mb-0">
+                                            @foreach ($order->items as $item)
+                                                <li>{{ $item->quantity }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td class="text-white">{{ number_format($order->discount, 2) }} PKR</td>
+                                    <td class="text-white">{{ number_format($order->total_amount, 2) }} PKR</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3 px-3">{{ $orders->withQueryString()->links() }}</div>
+            </div>
+>>>>>>> Stashed changes
+        </div>
     @else
     <div class="alert alert-info text-center">No orders found for the selected filter.</div>
     @endif

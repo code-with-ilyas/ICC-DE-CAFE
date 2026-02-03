@@ -347,4 +347,5 @@
         color: rgb(27, 26, 26);
     }
 </style>
+
 @endsection
