@@ -12,7 +12,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Karachi',
+
 
     'locale' => env('APP_LOCALE', 'en'),
 

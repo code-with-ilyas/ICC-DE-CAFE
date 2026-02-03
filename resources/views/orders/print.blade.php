@@ -52,12 +52,12 @@
 
         .apply-discount-btn {
             padding: 5px 10px;
-            background-color:rgb(212, 17, 17);
+           
             color: black;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-             font-weight: bold;
+            font-weight: bold;
         }
 
         @media print {
@@ -97,8 +97,8 @@
             <img class="rounded-circle" src="{{ asset('admin_assets/img/GreenBurger.png') }}" alt="Logo" style="width: 100px; height: 100px; margin-bottom: 4px;">
             <h4 style="margin: 0;">ICC 2 Filling Station Basnak Drosh Chitral</h4>
             <br>
-             <h4 style="margin: 0;">MOBILE NUMBER: 03250206666</h4>
-             <h5 style="margin: 5px 0;">Customer Copy</h5>
+            <h4 style="margin: 0;">MOBILE NUMBER: 03250206666</h4>
+            <h5 style="margin: 5px 0;">Customer Copy</h5>
         </div>
 
         <div class="card">
@@ -180,8 +180,9 @@
             </div>
 
             <div class="no-print" style="text-align: center; margin-top: 20px;">
-                <button onclick="printAndRedirect()" style="padding: 8px 380px; background-color:rgb(241, 16, 16); color: black; border: none; border-radius: 4px; cursor: pointer;  font-weight: bold;">Print</button>
+                <button onclick="printAndRedirect()" style="padding: 10px 370px; background-color: rgb(241, 16, 16); color: black; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Print</button>
             </div>
+
         </div>
 
         <script>

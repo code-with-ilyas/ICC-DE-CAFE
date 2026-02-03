@@ -7,7 +7,7 @@
         @method('PUT')
 
         <div class="card-header d-flex justify-content-between align-items-center py-2 px-3">
-        <a href="{{ route('orders.index') }}" class="btn btn-success btn-sm">Show Orders List</a>
+            <a href="{{ route('orders.index') }}" class="btn btn-success btn-sm">Show Orders List</a>
             <button type="submit" class="btn btn-sm btn-success">
                 <i class="fas fa-save me-1"></i>Update Order
             </button>
@@ -25,14 +25,12 @@
                 </div>
             </div>
 
-            <div class="mb-3 border rounded p-3 bg-">
+            <div class="mb-3 border rounded p-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h6 class="mb-0 text-white">Order Items</h6>
-
                     <button type="button" id="add-item" class="btn btn-sm btn-success">
                         <i class="fas fa-plus"></i> Add Item
                     </button>
-
                 </div>
 
                 <hr>
@@ -44,7 +42,7 @@
                             <select class="form-select form-select-sm product-select" name="items[{{ $index }}][product_id]" required>
                                 <option value="">Select Product</option>
                                 @foreach($products as $product)
-                                <option value="{{ $product->product_id }}" data-price="{{ $product->price }}" 
+                                <option value="{{ $product->product_id }}" data-price="{{ $product->price }}"
                                     @if($item->product_id == $product->product_id) selected @endif>
                                     {{ $product->name }} - {{ number_format($product->price, 2) }}
                                 </option>
@@ -56,12 +54,13 @@
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control form-control-sm subtotal" readonly value="{{ number_format($item->subtotal, 2) }}PKR">
+                            <input type="hidden" class="hidden-subtotal" name="items[{{ $index }}][subtotal]" value="{{ $item->subtotal }}">
                         </div>
                         <div class="col-md-1">
-                            <button type="button" class="btn btn-sm btn-danger remove-item w-100" title="Remove Item">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0V6H6v6.5a.5.5 0 0 1-1 0v-7z"/>
-                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2h3.086A1.5 1.5 0 0 1 7.5 1h1a1.5 1.5 0 0 1 1.414 1H13.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z"/>
+                            <button type="button" class="btn btn-sm btn-danger remove-item w-100 d-flex align-items-center justify-content-center" title="Remove Item" style="height: 31px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                 </svg>
                             </button>
                         </div>
@@ -70,29 +69,46 @@
                 </div>
             </div>
 
-
-             
-
-
+             <div class="row justify-content-end mt-3">
+                    <div class="col-md-4">
+                        <div class="bg-total-container p-2 rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Grand Total :</h6>
+                                <span id="total-amount" class="fw-bold">RS = 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
-        
     </form>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let itemIndex = 1;
+        let itemIndex = {{ count($order->items) }};
 
         document.addEventListener('click', function (e) {
             if (e.target.id === 'add-item' || e.target.closest('#add-item')) {
                 const container = document.getElementById('order-items-container');
                 const newItem = document.querySelector('.order-item').cloneNode(true);
 
-                newItem.querySelector('.product-select').name = `items[${itemIndex}][product_id]`;
-                newItem.querySelector('.quantity').name = `items[${itemIndex}][quantity]`;
-                newItem.querySelector('.quantity').value = 1;
-                newItem.querySelector('.subtotal').value = '0.00PKR';
-                newItem.querySelector('.product-select').selectedIndex = 0;
+                // Update select field
+                const productSelect = newItem.querySelector('.product-select');
+                productSelect.name = `items[${itemIndex}][product_id]`;
+                productSelect.selectedIndex = 0;
+
+                // Update quantity
+                const quantityInput = newItem.querySelector('.quantity');
+                quantityInput.name = `items[${itemIndex}][quantity]`;
+                quantityInput.value = 1;
+
+                // Update subtotal display and hidden
+                const subtotalField = newItem.querySelector('.subtotal');
+                const hiddenSubtotal = newItem.querySelector('.hidden-subtotal');
+
+                subtotalField.value = '0.00PKR';
+                hiddenSubtotal.name = `items[${itemIndex}][subtotal]`;
+                hiddenSubtotal.value = '0.00';
 
                 itemIndex++;
                 container.appendChild(newItem);
@@ -116,18 +132,21 @@
                 const subtotal = price * qty;
 
                 item.querySelector('.subtotal').value = subtotal.toFixed(2) + 'PKR';
+                item.querySelector('.hidden-subtotal').value = subtotal.toFixed(2);
                 calculateTotal();
             }
         });
 
         function calculateTotal() {
             let total = 0;
-            document.querySelectorAll('.order-item').forEach(item => {
-                const val = item.querySelector('.subtotal').value.replace('PKR', '') || 0;
-                total += parseFloat(val);
+            document.querySelectorAll('.hidden-subtotal').forEach(input => {
+                total += parseFloat(input.value || 0);
             });
             document.getElementById('total-amount').textContent = total.toFixed(2) + 'PKR';
         }
+
+        // Initial total calculation
+        calculateTotal();
     });
 </script>
 <style>
@@ -265,20 +284,17 @@ hr {
     }
 
 
-
-/* Total container styling */
-.bg-total-container {
-    background-color: rgb(8, 3, 78); /* Your theme color */
-    border: 1px solid #00bcd4 !important; /* Matching your theme border */
-    box-shadow: 0 0 5px rgba(0, 188, 212, 0.5) !important; /* Glow effect */
-}
-
-/* Dark theme specific styles */
 .dark-theme .bg-total-container {
-    background-color: rgb(8, 3, 78); /* Dark theme color */
-    border: 1px solid #00bcd4 !important;
-    box-shadow: 0 0 5px rgba(0, 188, 212, 0.5) !important;
-}
+        background-color: rgb(124, 101, 27);
+        border: 1px solid rgb(126, 156, 17) !important;
+        box-shadow: 0 0 5px rgba(136, 167, 25, 0.5) !important;
+    }
+
+.dark-theme .bg-total-container {
+        background-color: rgb(124, 101, 27);
+        border: 1px solid rgb(126, 156, 17) !important;
+        box-shadow: 0 0 5px rgba(136, 167, 25, 0.5) !important;
+    }
 
 /* Ensure text is white in both themes */
 .bg-total-container h6,

@@ -19,7 +19,6 @@ class PurchaseStock extends Model
         'total_price',
     ];
 
-    // Optional: Casts
     protected $casts = [
         'date' => 'date',
         'unit_price' => 'decimal:2',

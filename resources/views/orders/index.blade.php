@@ -14,12 +14,12 @@
                 <thead>
                     <tr>
                         <th>S.No</th>
-                        <th>Customer Name</th>
-                        <th>Table #</th>
+                        <th>Name</th>
+                        <th>Table</th>
                         <th>Products</th>
-                        <th>Quantities</th>
+                        <th>Quantity</th>
                         <th>Discount</th>
-                        <th>Total Amount</th>
+                        <th>Amount</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -47,7 +47,7 @@
                         <td>{{ number_format($order->total_amount, 2) }} PKR</td>
                         <td>
                             <div class="d-flex flex-wrap gap-1 align-items-center">
-                                <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-success">Show</a>
+                                <!-- <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-success">Show</a> -->
                                 <a href="{{ route('orders.edit', $order) }}" class="btn btn-sm btn-success">Edit</a>
                                 <a href="{{ route('orders.kitchen.print', $order->id) }}" class="btn btn-sm btn-primary">KP</a>
                                 <a href="{{ route('orders.print', $order) }}" class="btn btn-sm btn-warning">Print</a>

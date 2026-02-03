@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('table_number')->nullable();
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('total_amount', 10, 2);
+             $table->boolean('printed')->default(false);
             $table->timestamps();
         });
     }

@@ -91,19 +91,14 @@
             <h5 style="margin: 5px 0;">Kitchen Copy</h5>
             <br>
 
-            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 10px;">
-                <label class="order-option-label" data-selected="" style="display: flex; align-items: center; gap: 5px;">
-                    <input class="order-option-input" type="radio" name="order_option" value="Servis"
-                        onchange="updateOrderType(this)"> SERVIS
-                </label>
-                <br>
+          
                 <label class="order-option-label" data-selected="" style="display: flex; align-items: center; gap: 5px;">
                     <input class="order-option-input" type="radio" name="order_option" value="Take A Way"
                         onchange="updateOrderType(this)"> TAKE A WAY
                 </label>
             </div>
 
-            <br>
+<br>
             <div class="card">
                 <div style="display: flex; justify-content: space-between;">
                     <p><strong>Date:</strong> {{ $order->created_at->format('d-m-Y') }}</p>
@@ -123,30 +118,16 @@
                                 <th>S.No</th>
                                 <th>Product</th>
                                 <th style="text-align: center;">Qty</th>
-                                <th style="text-align: right;">Price</th>
-                                <th style="text-align: right;">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php $total = 0; @endphp
                             @foreach($order->orderItems as $item)
-                            @php
-                                $price = $item->product->price ?? 0;
-                                $subtotal = $price * $item->quantity;
-                                $total += $subtotal;
-                            @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->product->name ?? 'Unknown Product' }}</td>
                                 <td style="text-align: center;">{{ $item->quantity }}</td>
-                                <td style="text-align: right;">{{ number_format($price, 2) }}</td>
-                                <td style="text-align: right;">{{ number_format($subtotal, 2) }}</td>
                             </tr>
                             @endforeach
-                            <tr>
-                                <td colspan="4" style="text-align: right; font-weight:bold;">Total</td>
-                                <td style="text-align: right; font-weight:bold;">{{ number_format($total, 2) }}</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -185,12 +166,13 @@
             window.onload = function() {
                 updateCurrentTime();
 
+                // Update selected value so it prints
                 const selectedInput = document.querySelector('input[name="order_option"]:checked');
                 if (selectedInput) {
                     updateOrderType(selectedInput);
                 }
 
-                // Auto print
+                // Automatically open the print dialog
                 window.print();
 
                 // Redirect after print
@@ -198,10 +180,13 @@
                     window.location.href = "{{ route('orders.index') }}";
                 };
 
+                // Fallback redirect
                 setTimeout(() => {
                     window.location.href = "{{ route('orders.index') }}";
                 }, 3000);
             };
         </script>
+
 </body>
+
 </html>

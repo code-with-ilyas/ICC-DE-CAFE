@@ -166,26 +166,26 @@
 
         <div class="form-side">
             <div class="nav-links-left">
-                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">𝓗𝓸𝓶𝓮</a>
             </div>
 
             <form method="POST" action="{{ route('login') }}" class="login-form-container">
                 @csrf
-                <h4 class="text-center mb-3">LOGIN FORM</h4>
+                <h4 class="text-center mb-3">𝓛𝓞𝓖𝓘𝓝 𝓕𝓞𝓡𝓜</h4>
 
                 <div class="mb-3 text-start">
-                    <label for="email">Email</label>
+                    <label for="email">𝓔𝓶𝓪𝓲𝓵</label>
                     <input type="email" id="email" name="email" class="form-control" required autofocus
-                        value="{{ old('email') }}" placeholder="Enter your email" />
+                        value="{{ old('email') }}" placeholder="𝓔𝓷𝓽𝓮𝓻 𝔂𝓸𝓾𝓻 𝓮𝓶𝓪𝓲𝓵" />
                     @error('email')
                     <div class="text-danger mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="mb-3 text-start">
-                    <label for="password">Password</label>
+                    <label for="password">𝓟𝓪𝓼𝓼𝔀𝓸𝓻𝓭</label>
                     <input type="password" id="password" name="password" class="form-control" required
-                        placeholder="Enter your password" />
+                        placeholder="𝓔𝓷𝓽𝓮𝓻 𝔂𝓸𝓾𝓻 𝓹𝓪𝓼𝓼𝔀𝓸𝓻𝓭" />
                     @error('password')
                     <div class="text-danger mt-1">{{ $message }}</div>
                     @enderror
@@ -193,16 +193,16 @@
 
                 <div class="mb-3 form-check text-start">
                     <input type="checkbox" class="form-check-input" id="remember_me" name="remember" />
-                    <label for="remember_me" class="form-check-label">Remember me</label>
+                    <label for="remember_me" class="form-check-label">𝓡𝓮𝓶𝓮𝓶𝓫𝓮𝓻 𝓶𝓮</label>
                 </div>
 
                 <div class="text-end mb-3">
                     @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}">Forgot your password?</a>
+                    <a href="{{ route('password.request') }}">𝓕𝓸𝓻𝓰𝓸𝓽 𝔂𝓸𝓾𝓻 𝓹𝓪𝓼𝓼𝔀𝓸𝓻𝓭?</a>
                     @endif
                 </div>
 
-                <button type="submit" class="btn btn-login w-100">LOGIN</button>
+                <button type="submit" class="btn btn-login w-100">𝓛𝓞𝓖𝓘𝓝</button>
             </form>
         </div>
     </div>

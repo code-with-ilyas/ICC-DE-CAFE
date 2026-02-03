@@ -182,7 +182,6 @@
             }
         });
 
-        // Quantity change
         document.addEventListener('change', function(e) {
             if (e.target.classList.contains('quantity')) {
                 const container = e.target.closest('.order-item');
@@ -197,7 +196,6 @@
             }
         });
 
-        // Close search results when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.classList.contains('product-search') &&
                 !e.target.classList.contains('search-result-item')) {
@@ -207,7 +205,6 @@
             }
         });
 
-        // Calculate total amount
         function calculateTotal() {
             let total = 0;
             document.querySelectorAll('.subtotal').forEach(subtotal => {
@@ -333,7 +330,7 @@
     }
 
     .dark-theme .search-result-item:hover {
-        background-color: #333;
+        background-color: #00838f; /* 🔹 Changed from #333 to teal-ish */
     }
 
     .order-item {
@@ -341,11 +338,11 @@
     }
 
     .product-search-results {
-        border: 1px solid rgb(34, 35, 36);
+        border: 1px solid rgb(223, 229, 235);
     }
 
     .dark-theme .product-search-results {
-        background-color: #2a2a2a;
+        background-color: rgb(179, 155, 155);
         border-color: #00bcd4;
         color: rgb(27, 26, 26);
     }

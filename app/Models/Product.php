@@ -11,7 +11,11 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $table = 'products'; // ✅ explicit (safe)
     protected $primaryKey = 'product_id';
+    public $incrementing = true;    // ✅ important
+    protected $keyType = 'int';     // ✅ important
+
     protected $fillable = [
         'category_id',
         'name',
@@ -21,9 +25,15 @@ class Product extends Model
         'quantity'
     ];
 
+    // ✅ Category relation
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    // ✅ Product → ProductStock (pivot)
+    public function productStocks(): HasMany
+    {
+        return $this->hasMany(ProductStock::class, 'product_id', 'product_id');
+    }
 }

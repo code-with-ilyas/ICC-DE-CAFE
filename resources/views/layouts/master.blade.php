@@ -32,13 +32,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#home">Home</a>
+                    <a class="nav-link" href="#home">𝓗𝓸𝓶𝓮</a>
                 </li>
                 <li class="nav-item">
                     <!-- <a class="nav-link" href="#about">About</a> -->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#gallary">Gallary</a>
+                    <a class="nav-link" href="#gallary">𝓖𝓪𝓵𝓵𝓮𝓻𝔂</a>
                 </li>
                 <li class="nav-item">
                     <!-- <a class="nav-link" href="#book-table">Book-Table</a> -->
@@ -55,11 +55,11 @@
             <ul class="navbar-nav">
 
                  <li class="nav-item">
-                    <a class="nav-link" href="#testmonial">Reviews</a>
+                    <a class="nav-link" href="#testmonial">𝓡𝓮𝓿𝓲𝓮𝔀𝓼</a>
                   </li>
 
                   <li class="nav-item">
-                     <a class="nav-link" href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Login</a>
+                     <a class="nav-link" href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">𝓛𝓸𝓰𝓲𝓷</a>
                   </li>
 
                  
@@ -73,7 +73,7 @@
         <h1 class="display-2 font-weight-bold my-3" style="font-style: italic;">𝓲𝓬𝓬  <span style="color: red;">𝓓𝓮 </span> 𝓬𝓪𝓯𝓮</h1>
        
             <h2 class="display-4 mb-5">𝒜𝓁𝓌𝒶𝓎𝓈 𝒻𝓇𝑒𝓈𝒽 & 𝒟𝑒𝓁𝒾𝑔𝒽𝓉𝒻𝓊𝓁</h2>
-            <a class="btn btn-lg btn-primary" href="#gallary">View Our gallary</a>
+            <a class="btn btn-lg btn-primary" href="#gallary">𝓥𝓲𝓮𝔀 𝓞𝓾𝓻 𝓖𝓪𝓵𝓵𝓮𝓻𝔂</a>
         </div>
     </header>
 

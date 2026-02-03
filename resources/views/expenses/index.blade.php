@@ -72,7 +72,7 @@
                 </tbody>
             </table>
 
-            <hr>
+           
 
             <div class="d-flex justify-content-end text-white fw-bold fs-5 mb-3">
                 Grand Total: Rs. {{ number_format($total, 2) }}
