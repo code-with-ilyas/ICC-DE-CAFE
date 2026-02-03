@@ -132,7 +132,6 @@
 
                 </a>
                 <ul class="nav flex-column">
-<<<<<<< Updated upstream
 
                     @if(auth()->user()->role === 'admin')
                     <li><a href="{{ route('dashboard') }}" class="nav-link d-flex align-items-center text-warning"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
@@ -147,17 +146,6 @@
                     <li><a href="{{ route('reports.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-bar-chart-fill me-2"></i>Reports</a></li>
                     <!-- <li><a href="{{ route('purchase.reports.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-receipt-cutoff me-2"></i>Purchase Reports</a></li> -->
                     <li><a href="{{ route('expenses.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-cash-stack me-2"></i>Expenses</a></li>
-=======
-                    @if(auth()->user()->role === 'admin')
-                    <li><a href="{{ route('dashboard') }}" class="nav-link d-flex align-items-center text-warning"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
-                    <li><a href="{{ route('categories.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-list-task me-2"></i>Categories</a></li>
-                    <li><a href="{{ route('products.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-box-seam me-2"></i>Products</a></li>
-                    <li><a href="{{ route('orders.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-receipt me-2"></i>Orders</a></li>
-                    <li><a href="{{ route('reports.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-graph-up-arrow me-2"></i>Reports</a></li>
-                    <li><a href="{{ route('purchase_stocks.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-box-arrow-in-down me-2"></i>purchase Stocks</a></li>
-                    <li><a href="{{ route('purchase.reports.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-bar-chart-line me-2"></i>Purchase Reports</a></li>
-                    <li><a href="{{ route('expenses.index') }}" class="nav-link d-flex align-items-center"><i class="bi bi-cash-coin me-2"></i>Expenses</a></li>
->>>>>>> Stashed changes
                     @endif
 
                     @if(auth()->user()->role === 'client')
@@ -170,13 +158,7 @@
                     @endif
 
                     <li class="nav-item mt-2">
-<<<<<<< Updated upstream
                         <a href="{{ route('logout') }}" class="nav-link text-primary fw-bold" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right me-2"></i> LOG OUT</a>
-=======
-                        <a href="{{ route('logout') }}" class="nav-link text-primary fw-bold" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="bi bi-box-arrow-right me-2"></i> LOG OUT
-                        </a>
->>>>>>> Stashed changes
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>

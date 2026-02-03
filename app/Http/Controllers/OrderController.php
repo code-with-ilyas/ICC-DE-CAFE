@@ -14,7 +14,6 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $today = now()->toDateString();
-<<<<<<< Updated upstream
 
         $query = Order::whereDate('created_at', $today)
             ->where('printed', false);
@@ -26,32 +25,6 @@ class OrderController extends Controller
 
         $orders = $query->with('items.product')->latest()->paginate(50);
         return view('orders.index', compact('orders'));
-=======
-
-        $query = Order::whereDate('created_at', $today)
-            ->where('printed', false);
-
-        if ($request->has('print')) {
-            $order = Order::with('items.product')->find($request->print);
-            return view('orders.print', compact('order'));
-        }
-
-        $orders = $query->with('items.product')->latest()->paginate(50);
-
-        return view('orders.index', compact('orders'));
-    }
-
-    public function print($id)
-    {
-        $order = Order::with('items.product')->findOrFail($id);
-
-        if (!$order->printed) {
-            $order->printed = true;
-            $order->save();
-        }
-
-        return view('orders.print', compact('order'));
->>>>>>> Stashed changes
     }
 
     public function store(Request $request)
@@ -67,7 +40,6 @@ class OrderController extends Controller
         ]);
 
         return DB::transaction(function () use ($validated) {
-<<<<<<< Updated upstream
 
             $total = 0;
 
@@ -79,19 +51,6 @@ class OrderController extends Controller
                 $total += $item['subtotal'];
             }
 
-=======
-            $totalAmount = 0;
-
-            foreach ($validated['items'] as $item) {
-                $product = Product::find($item['product_id']);
-                $subtotal = $product->price * $item['quantity'];
-                $totalAmount += $subtotal;
-            }
-
-            $discount = $validated['discount'] ?? 0;
-            $grandTotal = $totalAmount - $discount;
-
->>>>>>> Stashed changes
             $order = Order::create([
                 'customer_name' => $validated['customer_name'],
                 'table_number'  => $validated['table_number'],
@@ -122,7 +81,6 @@ class OrderController extends Controller
                 }
             }
 
-<<<<<<< Updated upstream
             return redirect()->route('orders.index')
                 ->with('success', 'Order created successfully');
         });
@@ -188,12 +146,6 @@ class OrderController extends Controller
         return redirect()->route('orders.index')
             ->with('success', 'Order updated successfully.');
     }
-=======
-            return redirect()->route('orders.index', $order)
-                ->with('success', 'Order created successfully.');
-        });
-    }
->>>>>>> Stashed changes
 
     public function show(Order $order)
     {
@@ -214,54 +166,6 @@ class OrderController extends Controller
         return view('orders.edit', compact('order', 'products'));
     }
 
-<<<<<<< Updated upstream
-=======
-    public function update(Request $request, Order $order)
-    {
-        $validated = $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'table_number' => 'nullable|string|max:50',
-            'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|exists:products,product_id',
-            'items.*.quantity' => 'required|integer|min:1',
-            'discount' => 'nullable|numeric|min:0',
-        ]);
-
-        DB::transaction(function () use ($validated, $order) {
-            // Clear previous items
-            $order->items()->delete();
-
-            $totalAmount = 0;
-
-            foreach ($validated['items'] as $item) {
-                $product = Product::find($item['product_id']);
-                $subtotal = $product->price * $item['quantity'];
-                $totalAmount += $subtotal;
-
-                $order->items()->create([
-                    'product_id' => $product->product_id,
-                    'quantity' => $item['quantity'],
-                    'price' => $product->price,
-                    'subtotal' => $subtotal,
-                ]);
-            }
-
-            $discount = $validated['discount'] ?? $order->discount ?? 0;
-            $grandTotal = $totalAmount - $discount;
-
-            $order->update([
-                'customer_name' => $validated['customer_name'],
-                'table_number' => $validated['table_number'],
-                'total_amount' => $grandTotal,
-                'discount' => $discount,
-            ]);
-        });
-
-        return redirect()->route('orders.index')
-            ->with('success', 'Order updated successfully.');
-    }
-
->>>>>>> Stashed changes
     public function destroy(Order $order)
 {
     /** 🔁 RESTORE STOCK BEFORE DELETE */
@@ -274,7 +178,6 @@ class OrderController extends Controller
         }
     }
 
-<<<<<<< Updated upstream
     $order->items()->delete();
     $order->delete();
 
@@ -283,8 +186,6 @@ class OrderController extends Controller
 }
 
 
-=======
->>>>>>> Stashed changes
     public function applyDiscount(Request $request, $id)
     {
         $request->validate([
@@ -308,7 +209,6 @@ class OrderController extends Controller
 
     public function kitchenPrint(Order $order)
     {
-<<<<<<< Updated upstream
         $order->load('items.product');
         return view('orders.kitchen_print', compact('order'));
     }
@@ -333,9 +233,4 @@ class OrderController extends Controller
         }
         return view('orders.print', compact('order'));
     }
-=======
-        $order->load('orderItems.product');
-        return view('orders.kitchen_print', compact('order'));
-    }
->>>>>>> Stashed changes
 }

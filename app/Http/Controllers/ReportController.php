@@ -5,13 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
-<<<<<<< Updated upstream
 use App\Models\PurchaseStock;
 use App\Models\Expense;
 use App\Models\Product;
 use App\Models\Category;
-=======
->>>>>>> Stashed changes
 use Carbon\Carbon;
 
 class ReportController extends Controller
@@ -80,7 +77,6 @@ class ReportController extends Controller
 
         $orders = $query->with('items.product')->oldest()->paginate(120);
 
-<<<<<<< Updated upstream
         // Sum total_amount for filtered orders
         $totalSalesOverall = (clone $query)->sum('total_amount');
 
@@ -96,12 +92,6 @@ class ReportController extends Controller
         $netTotal = $totalSalesOverall - ($purchaseTotal + $expenseTotal);
 
         // Items Sold Summary (for filter range)
-=======
-        // Sum total_amount for filtered orders (careful: clone query to avoid affecting $orders)
-        $totalSalesOverall = (clone $query)->sum('total_amount');
-
-        // Items Sold Summary (product -> total quantity sold)
->>>>>>> Stashed changes
         $itemsSoldSummary = OrderItem::with('product')
             ->whereHas('order', function ($orderQuery) use ($request) {
                 if ($request->filled(['start_date', 'end_date'])) {
@@ -160,7 +150,6 @@ class ReportController extends Controller
             ->get()
             ->groupBy('product.name')
             ->map(fn($items) => $items->sum('quantity'));
-<<<<<<< Updated upstream
 
         // --- New: Product Sales ---
         $todayProductSales = OrderItem::with('product')
@@ -191,8 +180,6 @@ class ReportController extends Controller
             ->get()
             ->groupBy('product.category.name')
             ->map(fn($items) => $items->sum('quantity'));
-=======
->>>>>>> Stashed changes
 
         return view('reports.index', [
             'orders' => $orders,
@@ -214,7 +201,6 @@ class ReportController extends Controller
                 'last_financial_year' => $this->calculateSalesForFinancialYear(-1),
             ],
             'totalSalesOverall' => $totalSalesOverall,
-<<<<<<< Updated upstream
             'purchaseTotal' => $purchaseTotal,
             'expenseTotal' => $expenseTotal,
             'netTotal' => $netTotal,
@@ -226,11 +212,6 @@ class ReportController extends Controller
             'overallProductSales' => $overallProductSales,
             'todayCategorySales' => $todayCategorySales,
             'overallCategorySales' => $overallCategorySales,
-=======
-            'itemsSoldSummary' => $itemsSoldSummary,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
->>>>>>> Stashed changes
         ]);
     }
 
